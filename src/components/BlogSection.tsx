@@ -1,29 +1,36 @@
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
-const blogPosts = [
+const defaultBlogPosts = [
   {
+    id: "1",
     title: "Understanding Your Rights in Criminal Defense Cases",
     excerpt:
       "Learn about the fundamental rights every individual has when facing criminal charges and how to protect yourself legally.",
+    content: "",
     author: "Adv. Rajesh Kumar",
     date: "January 25, 2026",
     category: "Criminal Law",
     image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&h=250&fit=crop",
   },
   {
+    id: "2",
     title: "Divorce Proceedings: A Complete Legal Guide",
     excerpt:
       "Navigate the complexities of divorce with our comprehensive guide covering custody, alimony, and property division.",
+    content: "",
     author: "Adv. Priya Sharma",
     date: "January 20, 2026",
     category: "Family Law",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=250&fit=crop",
   },
   {
+    id: "3",
     title: "Corporate Compliance: Essential Guidelines for Businesses",
     excerpt:
       "Stay compliant with the latest corporate regulations and avoid legal pitfalls with our expert insights.",
+    content: "",
     author: "Adv. Amit Verma",
     date: "January 15, 2026",
     category: "Corporate Law",
@@ -32,6 +39,28 @@ const blogPosts = [
 ];
 
 export const BlogSection = () => {
+  const [blogPosts, setBlogPosts] = useState(defaultBlogPosts);
+
+  useEffect(() => {
+    // Load blog posts from localStorage
+    const savedBlogs = localStorage.getItem('blogPosts');
+    if (savedBlogs) {
+      const parsedBlogs = JSON.parse(savedBlogs);
+      // Map admin panel format to display format
+      const formattedBlogs = parsedBlogs.map((blog: any) => ({
+        id: blog.id,
+        title: blog.title,
+        excerpt: blog.excerpt,
+        content: blog.content,
+        author: blog.author,
+        date: blog.date,
+        category: "Legal",
+        image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&h=250&fit=crop",
+      }));
+      setBlogPosts(formattedBlogs);
+    }
+  }, []);
+
   return (
     <section id="blog" className="py-24 bg-background">
       <div className="container mx-auto px-4">
@@ -51,9 +80,9 @@ export const BlogSection = () => {
 
         {/* Blog Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post, index) => (
+          {blogPosts.map((post) => (
             <article
-              key={index}
+              key={post.id}
               className="group bg-gradient-card border border-border rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300"
             >
               {/* Image */}

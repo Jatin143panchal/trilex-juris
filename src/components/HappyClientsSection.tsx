@@ -1,14 +1,5 @@
 import { Star } from "lucide-react";
 
-const clients = [
-  { name: "Tata Group", logo: "TATA" },
-  { name: "Reliance Industries", logo: "RELIANCE" },
-  { name: "Infosys", logo: "INFOSYS" },
-  { name: "Wipro", logo: "WIPRO" },
-  { name: "Mahindra", logo: "MAHINDRA" },
-  { name: "Bharti Airtel", logo: "AIRTEL" },
-];
-
 const stats = [
   { value: "500+", label: "Happy Clients" },
   { value: "1000+", label: "Cases Won" },
@@ -45,20 +36,6 @@ export const HappyClientsSection = () => {
                 {stat.value}
               </div>
               <div className="text-muted-foreground text-sm">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Client Logos */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {clients.map((client, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-center p-6 rounded-xl bg-gradient-card border border-border hover:border-primary/30 transition-colors group"
-            >
-              <span className="font-serif text-lg font-bold text-muted-foreground group-hover:text-primary transition-colors">
-                {client.logo}
-              </span>
             </div>
           ))}
         </div>

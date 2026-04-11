@@ -1,29 +1,64 @@
+import { useState, useEffect } from 'react';
 
-const team = [
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  specialty: string;
+  description: string;
+  photo?: string;
+}
+
+const defaultTeam: TeamMember[] = [
   {
+    id: "1",
     name: "Adv. Dhruv Singh",
     role: "Founder & Managing Partner",
     specialty: "Litigation & Dispute Resolution",
     description:
       "Leading the firm's litigation practice with sharp focus on high-stakes commercial litigation, corporate disputes, and complex legal conflicts. Known for strategic clarity and commanding courtroom advocacy.",
+    photo: "/team/dhruv.jpg",
   },
   {
+    id: "2",
     name: "Adv. Neeshu Chandpuriya",
     role: "Co-Founder & Partner",
     specialty: "Litigation & Legal Strategy",
     description:
       "Core practice in civil and commercial litigation, procedural strategy, and dispute structuring. Recognized for analytical depth and command over procedural law.",
+    photo: "/team/20260203_122546.jpg",
   },
   {
+    id: "3",
     name: "Adv. Prachi Sharma",
     role: "Co-Founder & Partner",
     specialty: "Corporate Advisory & Dispute Resolution",
     description:
       "Specializing in corporate advisory, regulatory matters, and dispute resolution. Known for structured advisory approach and strong documentation.",
+    photo: "/team/prachi.jpg",
   },
 ];
 
 export const TeamSection = () => {
+  const [team, setTeam] = useState<TeamMember[]>(defaultTeam);
+
+  useEffect(() => {
+    // Load team photos from localStorage
+    const savedTeam = localStorage.getItem('teamMembers');
+    if (savedTeam) {
+      const parsedTeam = JSON.parse(savedTeam);
+      // Merge default team data with saved photos (only if saved photo exists)
+      const mergedTeam = defaultTeam.map(member => {
+        const savedMember = parsedTeam.find((m: any) => m.id === member.id);
+        return {
+          ...member,
+          photo: savedMember?.photo || member.photo,
+        };
+      });
+      setTeam(mergedTeam);
+    }
+  }, []);
+
   return (
     <section id="team" className="py-24 bg-navy-light">
       <div className="container mx-auto px-4">
@@ -44,21 +79,29 @@ export const TeamSection = () => {
 
         {/* Team Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {team.map((member, index) => (
+          {team.map((member) => (
             <div
-              key={index}
+              key={member.id}
               className="group text-center p-8 rounded-2xl bg-gradient-card border border-border hover:border-primary/50 transition-all duration-300"
             >
-              {/* Avatar Placeholder */}
+              {/* Avatar with Photo or Initials */}
               <div className="relative w-32 h-32 mx-auto mb-6">
-                <div className="w-full h-full rounded-full bg-gradient-gold flex items-center justify-center shadow-gold group-hover:scale-105 transition-transform">
-                  <span className="text-3xl font-serif font-bold text-primary-foreground">
-                    {member.name
-                      .replace("Adv. ", "")
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </span>
+                <div className="w-full h-full rounded-full bg-gradient-gold flex items-center justify-center shadow-gold group-hover:scale-105 transition-transform overflow-hidden">
+                  {member.photo ? (
+                    <img
+                      src={member.photo}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-3xl font-serif font-bold text-primary-foreground">
+                      {member.name
+                        .replace("Adv. ", "")
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </span>
+                  )}
                 </div>
                 <div className="absolute inset-0 rounded-full border-2 border-primary/30 group-hover:border-primary/50 transition-colors" />
               </div>
